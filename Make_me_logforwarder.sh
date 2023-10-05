@@ -7,9 +7,6 @@ stty size | perl -ale 'print "-"x$F[1]'
 echo "Preparing Environment..."
 stty size | perl -ale 'print "-"x$F[1]'
 
-read -p "Enter Host Name: " LogForwarderHostName
-hostname $LogForwarderHostName
-
 mkdir /var/log/remote_logs
 mkdir /etc/nixos/WazuhDocker
 
