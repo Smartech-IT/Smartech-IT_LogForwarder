@@ -44,7 +44,6 @@ echo "Configure Wazuh:"
 isok=true
 while $isok
 do 
-    read -p "Enter Wazuh Manager IP Address: " ipaddress
     read -p "Enter provided client port: " clientport
     read -p "Enter provided enrollment port: " enrollmentport
     read -p "Enter name for Wazuh Agent: " wazuhagentname
@@ -55,11 +54,6 @@ do
         isok=false
     fi
 done
-
-#Replace IP Address in ossec.conf
-if [[ "ADDRESOFMANAGER" != "" && $ipaddress != "" ]]; then
-  sed -i "s/ADDRESOFMANAGER/$ipaddress/" $OSSEC
-fi
 
 #Replace Client Port in ossec.conf
 if [[ "CLIENT_PORT" != "" && $clientport != "" ]]; then
