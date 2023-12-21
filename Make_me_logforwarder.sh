@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+#author https://github.com/MrGulczu
 #Script will Configure NixOS as well as wazuh agent
 #Create directories
 
