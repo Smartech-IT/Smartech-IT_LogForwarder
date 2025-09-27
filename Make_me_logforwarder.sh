@@ -26,6 +26,9 @@ cp ConfigFiles/Dockerfile /etc/nixos/WazuhDocker/Dockerfile
 cp ConfigFiles/ossec.conf /etc/nixos/WazuhDocker/ossec.conf
 cp Scripts/entrypoint.sh /etc/nixos/WazuhDocker/entrypoint.sh
 
+#Create empty password file for Wazuh Agent Docker image
+touch /etc/nixos/WazuhDocker/authd.pass
+
 echo "DONE!"
 
 stty size | perl -ale 'print "-"x$F[1]'
@@ -44,16 +47,22 @@ echo "Configure Wazuh:"
 isok=true
 while $isok
 do 
+    read -p "Enter provided server address: " serveraddress
     read -p "Enter provided client port: " clientport
     read -p "Enter provided enrollment port: " enrollmentport
     read -p "Enter name for Wazuh Agent: " wazuhagentname
     read -p "Enter group name for Wazuh Agent: " wazuhagentgroup
+    read -p "Enter registration password for Wazuh Agent: " regpass
     read -p "Those are correct? [Y/N]: " yesorno
     if [ "$yesorno" == "Y" ] || [ "$yesorno" == "y" ];
     then
         isok=false
     fi
 done
+#Replace Server Address in ossec.conf
+if [[ "SERVER_ADDRESS" != "" && $serveraddress != "" ]]; then
+  sed -i "s/SERVER_ADDRESS/$serveraddress/" $OSSEC
+fi
 
 #Replace Client Port in ossec.conf
 if [[ "CLIENT_PORT" != "" && $clientport != "" ]]; then
@@ -74,6 +83,8 @@ fi
 if [[ "NAMEOFWAZUHGROUP" != "" && $wazuhagentgroup != "" ]]; then
   sed -i "s/NAMEOFWAZUHGROUP/$wazuhagentgroup/" $OSSEC
 fi
+
+echo $regpass > /etc/nixos/WazuhDocker/authd.pass
 
 #Create Volume for Wazuh Data
 docker volume create wazuhvolume
