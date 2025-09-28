@@ -4,7 +4,7 @@ LABEL maintainer "NoEnv"
 LABEL version "4.12.0"
 LABEL description "Wazuh Agent"
 
-RUN mkdir /var/log/remote_logs/
+RUN mkdir -p /var/log/remote_logs/
 
 RUN apt-get update && apt-get install -y \
   procps curl apt-transport-https gnupg2 inotify-tools python3 && \
@@ -20,4 +20,5 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
+
 
